@@ -11,7 +11,7 @@ export class ProductClientService {
   private readonly API_URL = "https://dummyjson.com/products";
   private http: HttpClient = inject(HttpClient);
 
-  public fetchProducts(): Observable<{products: Product[]}> {
+  public getProducts(): Observable<{products: Product[]}> {
     return this.http.get<{products: Product[]}>(this.API_URL);
   }
   

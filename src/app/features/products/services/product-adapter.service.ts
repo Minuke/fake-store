@@ -11,7 +11,7 @@ export class ProductAdapterService {
   private productClient = inject(ProductClientService);
 
   public getProducts(): Observable<Product[]> {
-    return this.productClient.fetchProducts().pipe(
+    return this.productClient.getProducts().pipe(
       map(response => response.products)
     );
   }
