@@ -13,12 +13,12 @@ import { Observable } from 'rxjs';
 })
 export class ProductPageComponent {
 
-  public productService = inject(ProductFacadeService);
+  public productFacade = inject(ProductFacadeService);
 
   public products$!: Observable<Product[]>;
 
   public ngOnInit(): void {
-    this.products$ = this.productService.getProducts();
+    this.products$ = this.productFacade.getProducts();
   }
 
 }
