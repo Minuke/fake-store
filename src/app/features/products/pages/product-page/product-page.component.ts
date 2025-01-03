@@ -1,4 +1,4 @@
-import { AsyncPipe, CommonModule } from '@angular/common';
+import { CommonModule } from '@angular/common';
 import { Component, inject } from '@angular/core';
 import { Product } from '@entities/interfaces/product.interface';
 import { ProductListComponent } from '@features/products/components/product-list/product-list.component';

@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Product } from '@entities/interfaces/product.interface';
-import { Observable } from 'rxjs';
+import { map, Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -13,7 +13,7 @@ export class ProductFacadeService {
   private readonly API_URL = "https://dummyjson.com/products";
 
   public getProducts(): Observable<Product[]> {
-    return this.http.get<Product[]>(this.API_URL);
+    return this.http.get<{products: Product[]}>(this.API_URL).pipe(map(response => response.products));
   }
 
 }
