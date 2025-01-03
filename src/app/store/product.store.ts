@@ -1,7 +1,6 @@
 import { patchState, signalStore, withComputed, withMethods, withState } from '@ngrx/signals';
 import { Product } from "@entities/interfaces/product.interface";
 import { computed, inject } from '@angular/core';
-import { ProductFacadeService } from '@features/products/services/product-facade.service';
 import { ProductAdapterService } from '@features/products/services/product-adapter.service';
 import { pipe, switchMap, tap } from 'rxjs';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
@@ -19,21 +18,15 @@ const initialState: ProductState = {
 }
 
 export const ProductStore = signalStore(
+  { providedIn: "root"},
   withState(initialState),
   withComputed(({products}) => ({
-    products: computed(() => products()),
+    productsList: computed(() => products()),
     productsCount: computed(() => products().length),
   })),
-  withMethods((store, productAdapter = inject(ProductAdapterService)) => ({
-    loadPages: rxMethod<number>(
-      pipe(
-        tap(() => patchState(store, { state: 'loading' })),
-        switchMap(() => productAdapter.getProducts().pipe(
-          tap((products) => {
-            patchState(store, { products, state: 'loaded' })
-          })
-        )),
-      )
-    ) 
+  withMethods((store) => ({
+    setProducts: (products: Product[]) => patchState(store, { products, state: 'loaded' }),
+    setLoading: () => patchState(store, { state: 'loading' }),
+    setError: () => patchState(store, { state: 'error' }),
   }))
 )

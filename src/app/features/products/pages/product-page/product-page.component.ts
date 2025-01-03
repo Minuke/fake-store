@@ -1,9 +1,10 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject } from '@angular/core';
+import { Component, EnvironmentInjector, inject, runInInjectionContext } from '@angular/core';
 import { Product } from '@entities/interfaces/product.interface';
 import { ProductListComponent } from '@features/products/components/product-list/product-list.component';
 import { ProductFacadeService } from '@features/products/services/product-facade.service';
 import { Observable } from 'rxjs';
+import { toObservable } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-product-page',
@@ -14,11 +15,15 @@ import { Observable } from 'rxjs';
 export class ProductPageComponent {
 
   public productFacade = inject(ProductFacadeService);
+  private injector = inject(EnvironmentInjector);
 
   public products$!: Observable<Product[]>;
 
   public ngOnInit(): void {
-    this.products$ = this.productFacade.getProducts();
-  }
+    runInInjectionContext(this.injector, () => {
+        this.productFacade.getProducts();
+        this.products$ = toObservable(this.productFacade.products$);
+    });
+}
 
 }
